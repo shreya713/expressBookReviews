@@ -2,24 +2,6 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
-var fs=require('fs');
-var filename1="auth_users.js"
-function readFile1(filename1) {
-    fs.readfile(filename1,(err,data) => {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            console.log("\n\nthe cotent of the file is \n\n"
-            +data);
-            console.log("completed reading file1");
-        }
-    });
-}
-console.log('before reading file 1');
-readFile1(filename1);
-console.log('all done');
-
 
 let users = [];
 
@@ -64,7 +46,15 @@ regd_users.put("/:isbn", function(req, res)  {
         else{
             res.send("Unable to find user!");
         }
-      });     
+      });   
+      regd_users.delete("/auth/review/:isbn", (req, res) => {
+            const reviews = req.params.reviews;
+            if (reviews){
+                delete books[reviews]
+            }
+            res.send(`books with the review ${reviews} deleted.`);
+          });
+
       module.exports.authenticated = regd_users;
       module.exports.isValid = isValid;
       module.exports.users = users;
